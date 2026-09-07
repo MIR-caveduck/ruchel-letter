@@ -160,26 +160,46 @@
     .img-card{border-radius:12px}
   }
 
-  .bgm-control{
+  .bgm-panel{
     position:fixed; top:18px; right:18px; z-index:60;
-    display:none; align-items:center; gap:8px;
+    display:none; align-items:center; gap:10px;
     border:1px solid rgba(255,255,255,.16);
-    background:rgba(20,14,18,.72); color:#fff;
+    background:rgba(20,14,18,.76); color:#fff;
     backdrop-filter:blur(10px);
-    padding:9px 13px; border-radius:999px;
-    font-size:12px; font-weight:700; letter-spacing:.02em;
-    cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,.22);
+    padding:9px 12px; border-radius:999px;
+    box-shadow:0 8px 24px rgba(0,0,0,.22);
     transition:.25s ease;
   }
-  .bgm-control.show{display:flex}
-  .bgm-control:hover{transform:translateY(-1px); background:rgba(35,19,27,.84)}
+  .bgm-panel.show{display:flex}
+  .bgm-toggle{
+    border:0; background:transparent; color:#fff; padding:0;
+    display:flex; align-items:center; gap:8px;
+    font-size:12px; font-weight:700; letter-spacing:.02em;
+    cursor:pointer;
+  }
+  .bgm-panel:hover{transform:translateY(-1px); background:rgba(35,19,27,.86)}
   .bgm-dot{
     width:8px; height:8px; border-radius:50%;
     background:#e15c86; box-shadow:0 0 10px rgba(225,92,134,.7);
   }
-  .bgm-control.off .bgm-dot{opacity:.35; box-shadow:none}
+  .bgm-panel.off .bgm-dot{opacity:.35; box-shadow:none}
+  .volume-wrap{display:flex; align-items:center; gap:7px}
+  .volume-icon{font-size:13px; opacity:.9}
+  .volume-slider{
+    width:105px; accent-color:#e15c86; cursor:pointer;
+  }
+  .volume-value{
+    min-width:34px; text-align:right; font-size:11px;
+    color:#e8dce2; font-variant-numeric:tabular-nums;
+  }
   @media (max-width:700px){
-    .bgm-control{top:10px; right:10px; padding:8px 11px; font-size:11px}
+    .bgm-panel{
+      top:10px; right:10px; padding:8px 10px; gap:8px;
+      border-radius:18px;
+    }
+    .bgm-toggle{font-size:11px}
+    .volume-slider{width:76px}
+    .volume-value{min-width:30px; font-size:10px}
   }
 
 </style>
@@ -187,10 +207,26 @@
 <body>
 
 <audio id="bgm" src="music/ruchel-letter.mp3" preload="auto" loop></audio>
-<button class="bgm-control" id="bgmControl" type="button" aria-label="BGM 켜기 또는 끄기">
-  <span class="bgm-dot"></span>
-  <span id="bgmLabel">♫ BGM ON</span>
-</button>
+<div class="bgm-panel" id="bgmPanel">
+  <button class="bgm-toggle" id="bgmControl" type="button" aria-label="BGM 켜기 또는 끄기">
+    <span class="bgm-dot"></span>
+    <span id="bgmLabel">♫ BGM ON</span>
+  </button>
+  <div class="volume-wrap">
+    <span class="volume-icon">🔊</span>
+    <input
+      class="volume-slider"
+      id="volumeSlider"
+      type="range"
+      min="0"
+      max="100"
+      value="24"
+      step="1"
+      aria-label="BGM 볼륨"
+    >
+    <span class="volume-value" id="volumeValue">24%</span>
+  </div>
+</div>
 
 
 <section class="gate" id="gate">
@@ -308,9 +344,13 @@
   const gate = document.getElementById('gate');
   const openBtn = document.getElementById('openLetter');
   const bgm = document.getElementById('bgm');
+  const bgmPanel = document.getElementById('bgmPanel');
   const bgmControl = document.getElementById('bgmControl');
   const bgmLabel = document.getElementById('bgmLabel');
+  const volumeSlider = document.getElementById('volumeSlider');
+  const volumeValue = document.getElementById('volumeValue');
   let bgmEnabled = true;
+  let targetVolume = 0.24;
 
   bgm.volume = 0;
 
@@ -331,12 +371,12 @@
       bgm.volume = 0;
       await bgm.play();
       bgmEnabled = true;
-      bgmControl.classList.add('show');
-      bgmControl.classList.remove('off');
+      bgmPanel.classList.add('show');
+      bgmPanel.classList.remove('off');
       bgmLabel.textContent = '♫ BGM ON';
-      fadeBgmTo(0.24, 2000);
+      fadeBgmTo(targetVolume, 2000);
     } catch (e) {
-      bgmControl.classList.add('show', 'off');
+      bgmPanel.classList.add('show', 'off');
       bgmLabel.textContent = '♫ BGM OFF';
       bgmEnabled = false;
     }
@@ -346,16 +386,25 @@
     if (bgmEnabled && !bgm.paused) {
       bgm.pause();
       bgmEnabled = false;
-      bgmControl.classList.add('off');
+      bgmPanel.classList.add('off');
       bgmLabel.textContent = '♫ BGM OFF';
     } else {
       try {
         await bgm.play();
         bgmEnabled = true;
-        bgmControl.classList.remove('off');
+        bgmPanel.classList.remove('off');
         bgmLabel.textContent = '♫ BGM ON';
-        fadeBgmTo(0.24, 900);
+        fadeBgmTo(targetVolume, 900);
       } catch (e) {}
+    }
+  });
+
+  volumeSlider.addEventListener('input', () => {
+    const percent = Number(volumeSlider.value);
+    targetVolume = percent / 100;
+    volumeValue.textContent = percent + '%';
+    if (!bgm.paused && bgmEnabled) {
+      bgm.volume = targetVolume;
     }
   });
   const revealBtn = document.getElementById('revealBtn');
@@ -391,8 +440,9 @@
       bgm.currentTime = 0;
       bgm.volume = 0;
       bgmEnabled = true;
-      bgmControl.classList.remove('show','off');
+      bgmPanel.classList.remove('show','off');
       bgmLabel.textContent = '♫ BGM ON';
+      targetVolume = Number(volumeSlider.value) / 100;
     }, 500);
   });
 
