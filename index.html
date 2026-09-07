@@ -159,9 +159,39 @@
     figure{margin:22px 0}
     .img-card{border-radius:12px}
   }
+
+  .bgm-control{
+    position:fixed; top:18px; right:18px; z-index:60;
+    display:none; align-items:center; gap:8px;
+    border:1px solid rgba(255,255,255,.16);
+    background:rgba(20,14,18,.72); color:#fff;
+    backdrop-filter:blur(10px);
+    padding:9px 13px; border-radius:999px;
+    font-size:12px; font-weight:700; letter-spacing:.02em;
+    cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,.22);
+    transition:.25s ease;
+  }
+  .bgm-control.show{display:flex}
+  .bgm-control:hover{transform:translateY(-1px); background:rgba(35,19,27,.84)}
+  .bgm-dot{
+    width:8px; height:8px; border-radius:50%;
+    background:#e15c86; box-shadow:0 0 10px rgba(225,92,134,.7);
+  }
+  .bgm-control.off .bgm-dot{opacity:.35; box-shadow:none}
+  @media (max-width:700px){
+    .bgm-control{top:10px; right:10px; padding:8px 11px; font-size:11px}
+  }
+
 </style>
 </head>
 <body>
+
+<audio id="bgm" src="music/ruchel-letter.mp3" preload="auto" loop></audio>
+<button class="bgm-control" id="bgmControl" type="button" aria-label="BGM 켜기 또는 끄기">
+  <span class="bgm-dot"></span>
+  <span id="bgmLabel">♫ BGM ON</span>
+</button>
+
 
 <section class="gate" id="gate">
   <div class="gate-inner">
@@ -277,11 +307,63 @@
 <script>
   const gate = document.getElementById('gate');
   const openBtn = document.getElementById('openLetter');
+  const bgm = document.getElementById('bgm');
+  const bgmControl = document.getElementById('bgmControl');
+  const bgmLabel = document.getElementById('bgmLabel');
+  let bgmEnabled = true;
+
+  bgm.volume = 0;
+
+  function fadeBgmTo(target, duration = 1800) {
+    const start = bgm.volume;
+    const steps = 30;
+    const stepMs = duration / steps;
+    let i = 0;
+    const timer = setInterval(() => {
+      i++;
+      bgm.volume = Math.max(0, Math.min(1, start + (target - start) * (i / steps)));
+      if (i >= steps) clearInterval(timer);
+    }, stepMs);
+  }
+
+  async function startBgm() {
+    try {
+      bgm.volume = 0;
+      await bgm.play();
+      bgmEnabled = true;
+      bgmControl.classList.add('show');
+      bgmControl.classList.remove('off');
+      bgmLabel.textContent = '♫ BGM ON';
+      fadeBgmTo(0.24, 2000);
+    } catch (e) {
+      bgmControl.classList.add('show', 'off');
+      bgmLabel.textContent = '♫ BGM OFF';
+      bgmEnabled = false;
+    }
+  }
+
+  bgmControl.addEventListener('click', async () => {
+    if (bgmEnabled && !bgm.paused) {
+      bgm.pause();
+      bgmEnabled = false;
+      bgmControl.classList.add('off');
+      bgmLabel.textContent = '♫ BGM OFF';
+    } else {
+      try {
+        await bgm.play();
+        bgmEnabled = true;
+        bgmControl.classList.remove('off');
+        bgmLabel.textContent = '♫ BGM ON';
+        fadeBgmTo(0.24, 900);
+      } catch (e) {}
+    }
+  });
   const revealBtn = document.getElementById('revealBtn');
   const secret = document.getElementById('secret');
   const againBtn = document.getElementById('againBtn');
 
   openBtn.addEventListener('click', () => {
+    startBgm();
     gate.classList.add('preopen');
     setTimeout(() => {
       gate.classList.add('open');
@@ -305,6 +387,12 @@
       revealBtn.textContent = '✨ 실제 루첼 확인하기 ✨';
       gate.classList.remove('open','preopen');
       document.body.classList.remove('ready');
+      bgm.pause();
+      bgm.currentTime = 0;
+      bgm.volume = 0;
+      bgmEnabled = true;
+      bgmControl.classList.remove('show','off');
+      bgmLabel.textContent = '♫ BGM ON';
     }, 500);
   });
 
