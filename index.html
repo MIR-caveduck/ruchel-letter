@@ -1,1 +1,319 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>1st Anniversary - 루첼에게</title>
+<style>
+  :root {
+    --bg:#0d0b10;
+    --bg2:#171018;
+    --paper:#fffdf9;
+    --ink:#2a2328;
+    --muted:#8e7d86;
+    --accent:#d72f64;
+    --accent2:#7e1836;
+    --line:#eadde3;
+    --shadow:0 24px 80px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo",system-ui,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 20% 10%, rgba(126,24,54,.22), transparent 30%),
+      radial-gradient(circle at 80% 20%, rgba(215,47,100,.12), transparent 28%),
+      linear-gradient(180deg,var(--bg2),var(--bg));
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0; pointer-events:none;
+    background-image:radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
+    background-size:26px 26px;
+    mask-image:linear-gradient(to bottom,black,transparent 80%);
+  }
+  .gate{
+    position:fixed; inset:0; z-index:50;
+    display:grid; place-items:center;
+    background:
+      radial-gradient(circle at 50% 38%, rgba(215,47,100,.16), transparent 28%),
+      linear-gradient(180deg,#120d13,#080709);
+    transition:opacity .8s ease, visibility .8s ease;
+  }
+  .gate.open{opacity:0; visibility:hidden}
+  .gate-inner{text-align:center; width:min(92vw,560px); color:#f6eef2}
+  .eyebrow{font-size:12px; letter-spacing:.25em; text-transform:uppercase; opacity:.7; margin-bottom:18px}
+  .envelope-wrap{perspective:1000px; margin:0 auto 26px; width:280px; height:190px; position:relative}
+  .envelope{
+    position:absolute; inset:0; border-radius:12px;
+    background:linear-gradient(145deg,#f2d6df,#eab6c8);
+    box-shadow:0 30px 80px rgba(0,0,0,.45);
+    overflow:hidden;
+  }
+  .envelope:before{
+    content:""; position:absolute; inset:0;
+    background:
+      linear-gradient(32deg, transparent 49%, rgba(255,255,255,.55) 50% 52%, transparent 53%),
+      linear-gradient(-32deg, transparent 49%, rgba(255,255,255,.42) 50% 52%, transparent 53%);
+    opacity:.55;
+  }
+  .flap{
+    position:absolute; left:0; right:0; top:0; height:58%;
+    background:linear-gradient(180deg,#f7e3ea,#e7b7c6);
+    clip-path:polygon(0 0,100% 0,50% 100%);
+    transform-origin:top;
+    z-index:3;
+    transition:transform .85s cubic-bezier(.2,.8,.2,1);
+  }
+  .seal{
+    position:absolute; z-index:4; left:50%; top:50%; transform:translate(-50%,-35%);
+    width:56px; height:56px; border-radius:50%;
+    display:grid; place-items:center; font-size:26px;
+    color:white; background:radial-gradient(circle at 35% 35%,#ef5c84,#a71543 70%);
+    box-shadow:0 5px 18px rgba(120,0,35,.35);
+  }
+  .letter-peek{
+    position:absolute; left:24px; right:24px; bottom:8px; height:115px;
+    background:#fffdfa; border-radius:8px 8px 2px 2px;
+    box-shadow:0 5px 18px rgba(0,0,0,.12);
+    transform:translateY(44px); transition:transform .9s .12s cubic-bezier(.2,.8,.2,1);
+    z-index:2;
+  }
+  .envelope-wrap:hover .flap{transform:rotateX(-18deg)}
+  .gate.preopen .flap{transform:rotateX(-178deg)}
+  .gate.preopen .letter-peek{transform:translateY(-34px)}
+  .open-btn{
+    border:1px solid rgba(255,255,255,.18); color:white;
+    background:rgba(255,255,255,.07); backdrop-filter:blur(8px);
+    padding:12px 22px; border-radius:999px; cursor:pointer;
+    font-size:15px; transition:.25s ease;
+  }
+  .open-btn:hover{transform:translateY(-2px); background:rgba(255,255,255,.12)}
+  .gate h1{font-size:28px; margin:0 0 8px; font-weight:700}
+  .gate p{margin:0 0 22px; color:#cebfc6; font-size:14px}
 
+  main{opacity:0; transform:translateY(16px); transition:1s ease}
+  body.ready main{opacity:1; transform:none}
+  .shell{width:min(100% - 24px,900px); margin:0 auto; padding:72px 0 100px}
+  .paper{
+    background:var(--paper);
+    border-radius:24px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.7);
+  }
+  .paper-inner{padding:52px 54px 26px}
+  .topline{display:flex; align-items:center; justify-content:center; gap:16px; color:#5f4f57; font-size:12px}
+  .topline::before,.topline::after{content:""; width:120px; height:1px; background:#6e5a64}
+  .title{text-align:center; margin:16px 0 34px}
+  .title h2{font-family:Georgia,"Times New Roman",serif; font-size:26px; margin:0 0 4px}
+  .title div{font-size:15px; letter-spacing:.03em}
+  .letter{
+    width:min(100%,650px); margin:0 auto;
+    text-align:center; font-size:15px; line-height:2.05; word-break:keep-all;
+  }
+  .letter p{margin:0 0 22px}
+  .quote{
+    display:inline-block; margin:6px 0 18px; padding:10px 18px;
+    color:var(--accent); font-weight:700;
+    border-top:1px solid #efcbd7; border-bottom:1px solid #efcbd7;
+  }
+  figure{margin:30px 0}
+  .img-card{width:100%; display:block; border-radius:18px; box-shadow:0 16px 40px rgba(63,28,42,.16)}
+  .img-card.tall{max-height:1100px; object-fit:cover}
+  figcaption{margin-top:10px; text-align:center; font-size:12px; color:var(--muted)}
+  .divider{display:flex; align-items:center; gap:14px; margin:42px 0; color:#b18c9b}
+  .divider::before,.divider::after{content:""; flex:1; height:1px; background:var(--line)}
+  .signature{margin-top:22px; font-weight:700}
+  .ps{font-size:13px; font-style:italic; color:#5d4b53}
+  .reveal-wrap{text-align:center; margin:34px 0}
+  .reveal-btn{
+    border:none; background:linear-gradient(135deg,var(--accent2),var(--accent));
+    color:#fff; font-weight:700; padding:13px 22px; border-radius:999px;
+    cursor:pointer; box-shadow:0 12px 24px rgba(155,25,66,.2);
+    transition:.25s ease;
+  }
+  .reveal-btn:hover{transform:translateY(-2px)}
+  .secret{max-height:0; overflow:hidden; opacity:0; transition:max-height 1.1s ease,opacity .7s ease}
+  .secret.show{max-height:2000px; opacity:1}
+  .section-label{text-align:center; font-weight:800; margin-bottom:18px}
+  .ending{
+    text-align:center; padding:44px 20px 50px; border-top:1px solid var(--line);
+    background:linear-gradient(180deg,#fffdf9,#fff7fa);
+  }
+  .ending .heart{font-size:26px; color:var(--accent); margin-bottom:8px}
+  .again{margin-top:16px; border:1px solid #d8c7cf; background:white; padding:9px 16px; border-radius:999px; cursor:pointer}
+  .fade{opacity:0; transform:translateY(28px); transition:.8s ease}
+  .fade.in{opacity:1; transform:none}
+
+  @media (max-width:700px){
+    .shell{width:min(100% - 12px,900px); padding:18px 0 40px}
+    .paper{border-radius:16px}
+    .paper-inner{padding:34px 18px 18px}
+    .letter{font-size:14px; line-height:1.95}
+    .title h2{font-size:23px}
+    .topline::before,.topline::after{width:56px}
+    figure{margin:22px 0}
+    .img-card{border-radius:12px}
+  }
+</style>
+</head>
+<body>
+
+<section class="gate" id="gate">
+  <div class="gate-inner">
+    <div class="eyebrow">1st Anniversary Letter</div>
+    <div class="envelope-wrap" aria-hidden="true">
+      <div class="envelope">
+        <div class="letter-peek"></div>
+        <div class="flap"></div>
+        <div class="seal">♥</div>
+      </div>
+    </div>
+    <h1>루첼에게 도착한 편지가 있습니다.</h1>
+    <p>봉투를 열어 편지를 확인해 주세요.</p>
+    <button class="open-btn" id="openLetter">편지 열기</button>
+  </div>
+</section>
+
+<main id="main">
+  <div class="shell">
+    <article class="paper">
+      <div class="paper-inner">
+        <div class="topline fade"><span>1st Anniversary</span></div>
+        <div class="title fade">
+          <h2>루첼에게</h2>
+        </div>
+
+        <div class="letter">
+          <p class="fade">
+            어떤 머리말을 고르려는 건 오늘이 정말 특별한 날이라 몇 번씩 써 보고 지웠는데,<br>
+            생각해 보면 그동안 방송을 정말 자주 챙겨본 건 아니었던 것 같아요.<br>
+            가끔 생각날 때 찾아가 보고,<br>
+            간간이 방송을 구경하던 정도라<br>
+            아직 골골이라 말하기엔 조금 부족한 사람이었던 것 같아요. ☺
+          </p>
+
+          <p class="fade">
+            그래도 그렇게 한 해, 두 해 보다 보니<br>
+            어느새 루첼님이라는 사람이 꽤 익숙해졌고,<br>
+            방송을 찾아갈 때마다 조금씩 좋은 기억들이 쌓였던 것 같아요.
+          </p>
+
+          <figure class="fade">
+            <img class="img-card tall" src="images/ruchel-main.png" alt="루첼 메이드 이미지">
+          </figure>
+
+          <p class="fade">
+            그리고 이번 1주년을 보면서 문득 그런 생각이 들었습니다.
+          </p>
+
+          <div class="quote fade">"이제는 나도 골골이 해볼까?"</div>
+
+          <p class="fade">
+            지난 1년을 처음부터 끝까지 함께한 골골이는 아니지만,<br>
+            이번 1주년을 계기로 앞으로의 시간은<br>
+            조금 더 가까이에서 함께해 보고 싶어요.<br>
+            그러니까 조금 늦게 합류한 골골이라 해도,<br>
+            슬쩍 받아주시면 감사하겠습니다. ☺ ♥
+          </p>
+
+          <p class="fade">
+            루첼님, 데뷔 1주년 진심으로 축하드리고<br>
+            지금까지 견뎌온 1년보다<br>
+            앞으로 걸어갈 시간이 더 즐겁고 행복하기를 바라요.<br>
+            앞으로도 종종 찾아갑니다.<br>
+            조금 더 자주 놀러 갈게요.
+          </p>
+
+          <p class="fade">
+            다시 한번 1주년 축하해요, 루첼님! ♫<br>
+            앞으로 좋은 일들만 가득하길. ♥
+          </p>
+
+          <div class="signature fade">From. 하늘길</div>
+
+          <div class="divider fade">♥</div>
+
+          <figure class="fade">
+            <img class="img-card" src="images/hammer.png" alt="루첼 뿅망치 이미지">
+            <figcaption>P.S. 그리고 루첼님, 2기생 준비하시는 거 다 들었어요.<br><b>우리 루첼님도요?!!? ^^</b></figcaption>
+          </figure>
+
+          <div class="divider fade">방송보다가 추가한 이미지</div>
+
+          <div class="section-label fade">♡ 루첼 상상 속 루첼 ♡</div>
+          <figure class="fade">
+            <img class="img-card" src="images/imagination.png" alt="루첼 상상 속 루첼">
+          </figure>
+
+          <div class="reveal-wrap fade">
+            <button class="reveal-btn" id="revealBtn">✨ 실제 루첼 확인하기 ✨</button>
+          </div>
+
+          <div class="secret" id="secret">
+            <div class="section-label">✨ 실제 루첼 ✨</div>
+            <figure>
+              <img class="img-card" src="images/reality.png" alt="실제 루첼">
+            </figure>
+            <p><b>루첼님, 왜요. 저 아무 말도 안 했는데요? ^^</b></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ending fade">
+        <div class="heart">♥</div>
+        <div>편지를 끝까지 읽어줘서 고마워요.</div>
+        <strong>From. 하늘길</strong><br>
+        <button class="again" id="againBtn">처음부터 다시 보기</button>
+      </div>
+    </article>
+  </div>
+</main>
+
+<script>
+  const gate = document.getElementById('gate');
+  const openBtn = document.getElementById('openLetter');
+  const revealBtn = document.getElementById('revealBtn');
+  const secret = document.getElementById('secret');
+  const againBtn = document.getElementById('againBtn');
+
+  openBtn.addEventListener('click', () => {
+    gate.classList.add('preopen');
+    setTimeout(() => {
+      gate.classList.add('open');
+      document.body.classList.add('ready');
+      setTimeout(() => window.scrollTo({top:0, behavior:'smooth'}), 100);
+    }, 900);
+  });
+
+  revealBtn.addEventListener('click', () => {
+    secret.classList.add('show');
+    revealBtn.textContent = '진실 공개 완료 ♥';
+    revealBtn.disabled = true;
+    setTimeout(() => secret.scrollIntoView({behavior:'smooth', block:'start'}), 250);
+  });
+
+  againBtn.addEventListener('click', () => {
+    window.scrollTo({top:0, behavior:'smooth'});
+    setTimeout(() => {
+      secret.classList.remove('show');
+      revealBtn.disabled = false;
+      revealBtn.textContent = '✨ 실제 루첼 확인하기 ✨';
+      gate.classList.remove('open','preopen');
+      document.body.classList.remove('ready');
+    }, 500);
+  });
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting) e.target.classList.add('in');
+    });
+  }, {threshold:0.12});
+  document.querySelectorAll('.fade').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
