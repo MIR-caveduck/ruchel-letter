@@ -160,37 +160,183 @@
     .img-card{border-radius:12px}
   }
 
-  .bgm-control{
+
+  .music-player{
     position:fixed; top:18px; right:18px; z-index:60;
-    display:none; align-items:center; gap:8px;
-    border:1px solid rgba(255,255,255,.16);
-    background:rgba(20,14,18,.72); color:#fff;
-    backdrop-filter:blur(10px);
-    padding:9px 13px; border-radius:999px;
-    font-size:12px; font-weight:700; letter-spacing:.02em;
-    cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,.22);
-    transition:.25s ease;
+    width:min(390px,calc(100vw - 36px));
+    display:none;
+    color:#fff;
+    background:rgba(20,14,18,.82);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:18px;
+    backdrop-filter:blur(12px);
+    box-shadow:0 14px 38px rgba(0,0,0,.28);
+    overflow:hidden;
   }
-  .bgm-control.show{display:flex}
-  .bgm-control:hover{transform:translateY(-1px); background:rgba(35,19,27,.84)}
-  .bgm-dot{
-    width:8px; height:8px; border-radius:50%;
-    background:#e15c86; box-shadow:0 0 10px rgba(225,92,134,.7);
+  .music-player.show{display:block}
+  .music-main{padding:11px 12px 10px}
+  .music-top{
+    display:flex; align-items:center; gap:10px;
   }
-  .bgm-control.off .bgm-dot{opacity:.35; box-shadow:none}
+  .track-meta{
+    flex:1; min-width:0;
+  }
+  .track-title{
+    font-size:12px; font-weight:800;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .track-artist{
+    margin-top:2px; font-size:10px; color:#cfbdc6;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .music-btn{
+    border:0; background:transparent; color:#fff;
+    width:30px; height:30px; border-radius:9px;
+    display:grid; place-items:center;
+    cursor:pointer; font-size:15px;
+    transition:.18s ease;
+  }
+  .music-btn:hover{background:rgba(255,255,255,.09)}
+  .music-btn.active{
+    color:#ff7aa4; background:rgba(255,122,164,.10);
+  }
+  .play-btn{
+    width:34px; height:34px;
+    background:linear-gradient(135deg,#a61948,#e43a70);
+    box-shadow:0 6px 16px rgba(205,41,92,.22);
+  }
+  .play-btn:hover{background:linear-gradient(135deg,#b91d50,#ef477c)}
+  .music-controls{
+    display:flex; align-items:center; justify-content:center;
+    gap:4px; margin-top:7px;
+  }
+  .music-bottom{
+    display:flex; align-items:center; gap:8px;
+    margin-top:7px;
+  }
+  .volume-icon{font-size:12px; opacity:.9}
+  .volume-slider{
+    flex:1; min-width:70px;
+    accent-color:#e15c86; cursor:pointer;
+  }
+  .volume-value{
+    min-width:32px; text-align:right; font-size:10px;
+    color:#d7c5ce; font-variant-numeric:tabular-nums;
+  }
+  .track-count{
+    font-size:10px; color:#bba8b1; min-width:34px;
+  }
+  .playlist{
+    display:none;
+    max-height:245px; overflow:auto;
+    border-top:1px solid rgba(255,255,255,.10);
+    background:rgba(11,8,11,.55);
+    padding:7px;
+  }
+  .playlist.open{display:block}
+  .playlist-item{
+    width:100%; border:0; color:#fff;
+    background:transparent; cursor:pointer;
+    display:flex; align-items:center; gap:9px;
+    text-align:left; padding:9px 10px;
+    border-radius:10px;
+    transition:.18s ease;
+  }
+  .playlist-item:hover{background:rgba(255,255,255,.07)}
+  .playlist-item.active{background:rgba(225,92,134,.15)}
+  .playlist-num{
+    width:20px; flex:none; text-align:center;
+    color:#a9949e; font-size:10px;
+  }
+  .playlist-item.active .playlist-num{color:#ff79a3}
+  .playlist-meta{min-width:0}
+  .playlist-title{
+    font-size:11px; font-weight:700;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .playlist-artist{
+    margin-top:2px; font-size:9px; color:#bcaab3;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+
   @media (max-width:700px){
-    .bgm-control{top:10px; right:10px; padding:8px 11px; font-size:11px}
+    .music-player{
+      top:10px; right:10px;
+      width:min(350px,calc(100vw - 20px));
+      border-radius:15px;
+    }
+    .music-main{padding:9px 10px 8px}
+    .track-title{font-size:11px}
+    .track-artist{font-size:9px}
+    .music-btn{width:28px;height:28px}
+    .play-btn{width:32px;height:32px}
+    .playlist{max-height:210px}
+  }
+
+
+  .social-links{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    margin-top:18px;
+  }
+  .social-link{
+    width:34px;
+    height:34px;
+    display:grid;
+    place-items:center;
+    border-radius:8px;
+    text-decoration:none;
+    transition:transform .18s ease, filter .18s ease;
+  }
+  .social-link:hover{
+    transform:translateY(-2px) scale(1.06);
+    filter:brightness(1.05);
+  }
+  .social-link svg{
+    width:100%;
+    height:100%;
+    display:block;
+  }
+  .social-label{
+    display:none;
   }
 
 </style>
 </head>
 <body>
 
-<audio id="bgm" src="music/ruchel-letter.mp3" preload="auto" loop></audio>
-<button class="bgm-control" id="bgmControl" type="button" aria-label="BGM 켜기 또는 끄기">
-  <span class="bgm-dot"></span>
-  <span id="bgmLabel">♫ BGM ON</span>
-</button>
+<audio id="bgm" preload="auto"></audio>
+
+<div class="music-player" id="musicPlayer">
+  <div class="music-main">
+    <div class="music-top">
+      <div class="track-meta">
+        <div class="track-title" id="trackTitle">사랑을 전하고 싶다든가</div>
+        <div class="track-artist" id="trackArtist">루첼</div>
+      </div>
+      <button class="music-btn" id="playlistBtn" type="button" title="재생목록" aria-label="재생목록">☰</button>
+    </div>
+
+    <div class="music-controls">
+      <button class="music-btn" id="shuffleBtn" type="button" title="셔플" aria-label="셔플">⤨</button>
+      <button class="music-btn" id="prevBtn" type="button" title="이전 곡" aria-label="이전 곡">⏮</button>
+      <button class="music-btn play-btn" id="playBtn" type="button" title="재생/일시정지" aria-label="재생 또는 일시정지">▶</button>
+      <button class="music-btn" id="nextBtn" type="button" title="다음 곡" aria-label="다음 곡">⏭</button>
+      <button class="music-btn" id="repeatBtn" type="button" title="한 곡 반복" aria-label="한 곡 반복">↻</button>
+    </div>
+
+    <div class="music-bottom">
+      <span class="volume-icon">🔊</span>
+      <input class="volume-slider" id="volumeSlider" type="range" min="0" max="100" value="24" step="1" aria-label="BGM 볼륨">
+      <span class="volume-value" id="volumeValue">24%</span>
+      <span class="track-count" id="trackCount">1 / 5</span>
+    </div>
+  </div>
+
+  <div class="playlist" id="playlist"></div>
+</div>
 
 
 <section class="gate" id="gate">
@@ -220,7 +366,7 @@
 
         <div class="letter">
           <p class="fade">
-            어떤 머리말 크고 하는건 없는 유령을 통해 루첼님을 알게 된 건 벌써 1년 정도 되었는데,<br>
+            어떤 머리만 크고 하는건 없는 유령을 통해 루첼님을 알게 된 건 벌써 1년 정도 되었는데,<br>
             생각해 보면 그동안 방송을 정말 자주 챙겨본 건 아니었던 것 같아요.<br>
             가끔 생각날 때 찾아가 보고,<br>
             간간이 방송을 구경하던 정도라<br>
@@ -270,7 +416,7 @@
 
           <figure class="fade">
             <img class="img-card" src="images/hammer.png" alt="루첼 뿅망치 이미지">
-            <figcaption>P.S. 그리고 루첼님, 2기생 준비하시는 거 다 들었어요.<br><b>우리 루첼님도요?!!? ^^</b></figcaption>
+            <figcaption><i>P.S. 그리고 라브넴. 2기생 준비하시는 거 다 좋은데요.</i><br><b><i>우리 루첼님은요? 네? ^^</i></b></figcaption>
           </figure>
 
           <div class="divider fade">방송보다가 추가한 이미지</div>
@@ -299,6 +445,33 @@
         <div>편지를 끝까지 읽어줘서 고마워요.</div>
         <strong>From. 하늘길</strong><br>
         <button class="again" id="againBtn">처음부터 다시 보기</button>
+
+
+        <div class="social-links" aria-label="루첼 소셜 링크">
+          <a class="social-link x" href="https://x.com/ruchelkk" target="_blank" rel="noopener noreferrer" aria-label="루첼 X" title="X">
+            <svg viewBox="0 0 34 34" aria-hidden="true">
+              <rect width="34" height="34" rx="7" fill="#111111"/>
+              <path fill="#ffffff" d="M22.7 8.5h3.1l-6.8 7.8 8 9.2h-6.3l-4.9-6.4-5.6 6.4H7.1l7.1-8.1-7.7-8.9h6.4l4.4 5.8 5.4-5.8Zm-1.1 15h1.7L11.9 10.3H10l11.6 13.2Z"/>
+            </svg>
+          </a>
+
+          <a class="social-link soop" href="https://www.sooplive.com/station/ausdurfurwpf" target="_blank" rel="noopener noreferrer" aria-label="루첼 SOOP 방송국" title="SOOP">
+            <svg viewBox="0 0 34 34" aria-hidden="true">
+              <rect width="34" height="34" rx="7" fill="#050505"/>
+              <path d="M9.7 12.1c2.3 0 3.7 1.7 5.2 3.4 1.4-1.7 2.8-3.4 5.2-3.4 3.2 0 5.5 2.3 5.5 5.2s-2.3 5.2-5.5 5.2c-2.4 0-3.8-1.7-5.2-3.4-1.5 1.7-2.9 3.4-5.2 3.4-3.2 0-5.5-2.3-5.5-5.2s2.3-5.2 5.5-5.2Zm.2 3.1c-1.4 0-2.4.9-2.4 2.1s1 2.1 2.4 2.1c1.2 0 2.1-1.1 3.1-2.1-1-1-1.9-2.1-3.1-2.1Zm10 0c-1.2 0-2.1 1.1-3.1 2.1 1 1 1.9 2.1 3.1 2.1 1.4 0 2.4-.9 2.4-2.1s-1-2.1-2.4-2.1Z"
+                    fill="none" stroke="#00d8ff" stroke-width="2.2" stroke-linejoin="round"/>
+              <path d="M10 15.2c1.2 0 2.1 1.1 3.1 2.1-1 1-1.9 2.1-3.1 2.1-1.4 0-2.4-.9-2.4-2.1s1-2.1 2.4-2.1Zm9.9 0c1.4 0 2.4.9 2.4 2.1s-1 2.1-2.4 2.1c-1.2 0-2.1-1.1-3.1-2.1 1-1 1.9-2.1 3.1-2.1Z" fill="#050505"/>
+            </svg>
+          </a>
+
+          <a class="social-link youtube" href="https://www.youtube.com/@ruchelkk" target="_blank" rel="noopener noreferrer" aria-label="루첼 YouTube" title="YouTube">
+            <svg viewBox="0 0 34 34" aria-hidden="true">
+              <rect width="34" height="34" rx="7" fill="#ffffff"/>
+              <rect x="6" y="10" width="22" height="14" rx="4" fill="#ff0033"/>
+              <path d="M14.4 13.5 21.2 17l-6.8 3.5v-7Z" fill="#ffffff"/>
+            </svg>
+          </a>
+        </div>
       </div>
     </article>
   </div>
@@ -307,16 +480,67 @@
 <script>
   const gate = document.getElementById('gate');
   const openBtn = document.getElementById('openLetter');
+
   const bgm = document.getElementById('bgm');
-  const bgmControl = document.getElementById('bgmControl');
-  const bgmLabel = document.getElementById('bgmLabel');
-  let bgmEnabled = true;
+  const musicPlayer = document.getElementById('musicPlayer');
+  const trackTitle = document.getElementById('trackTitle');
+  const trackArtist = document.getElementById('trackArtist');
+  const trackCount = document.getElementById('trackCount');
+  const playBtn = document.getElementById('playBtn');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const shuffleBtn = document.getElementById('shuffleBtn');
+  const repeatBtn = document.getElementById('repeatBtn');
+  const playlistBtn = document.getElementById('playlistBtn');
+  const playlistEl = document.getElementById('playlist');
+  const volumeSlider = document.getElementById('volumeSlider');
+  const volumeValue = document.getElementById('volumeValue');
+
+  const tracks = [
+    { title:'사랑을 전하고 싶다든가', artist:'루첼', src:'music/01-love.mp3' },
+    { title:'메리크리 (メリクリ)', artist:'루첼', src:'music/02-merikuri.mp3' },
+    { title:'괴물 (怪物)', artist:'루첼', src:'music/03-kaibutsu.mp3' },
+    { title:'좋아하니까 (好きだから。)', artist:'루첼, 나노', src:'music/04-sukidakara.mp3' },
+    { title:'melty', artist:'베이블루 아카데미', src:'music/05-melty.mp3' }
+  ];
+
+  let currentTrack = 0;
+  let targetVolume = 0.24;
+  let shuffleMode = false;
+  let repeatOne = false;
 
   bgm.volume = 0;
 
-  function fadeBgmTo(target, duration = 1800) {
+  function renderPlaylist() {
+    playlistEl.innerHTML = '';
+    tracks.forEach((track, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'playlist-item' + (index === currentTrack ? ' active' : '');
+      button.innerHTML = `
+        <span class="playlist-num">${String(index + 1).padStart(2,'0')}</span>
+        <span class="playlist-meta">
+          <span class="playlist-title">${track.title}</span>
+          <span class="playlist-artist">${track.artist}</span>
+        </span>`;
+      button.addEventListener('click', () => {
+        loadTrack(index, true);
+      });
+      playlistEl.appendChild(button);
+    });
+  }
+
+  function updateTrackUI() {
+    const track = tracks[currentTrack];
+    trackTitle.textContent = track.title;
+    trackArtist.textContent = track.artist;
+    trackCount.textContent = `${currentTrack + 1} / ${tracks.length}`;
+    renderPlaylist();
+  }
+
+  function fadeVolume(target, duration = 900) {
     const start = bgm.volume;
-    const steps = 30;
+    const steps = 24;
     const stepMs = duration / steps;
     let i = 0;
     const timer = setInterval(() => {
@@ -326,38 +550,119 @@
     }, stepMs);
   }
 
-  async function startBgm() {
-    try {
-      bgm.volume = 0;
-      await bgm.play();
-      bgmEnabled = true;
-      bgmControl.classList.add('show');
-      bgmControl.classList.remove('off');
-      bgmLabel.textContent = '♫ BGM ON';
-      fadeBgmTo(0.24, 2000);
-    } catch (e) {
-      bgmControl.classList.add('show', 'off');
-      bgmLabel.textContent = '♫ BGM OFF';
-      bgmEnabled = false;
+  async function loadTrack(index, autoplay = false) {
+    currentTrack = (index + tracks.length) % tracks.length;
+    const track = tracks[currentTrack];
+    bgm.src = track.src;
+    bgm.load();
+    updateTrackUI();
+
+    if (autoplay) {
+      try {
+        bgm.volume = targetVolume;
+        await bgm.play();
+        playBtn.textContent = '❚❚';
+      } catch (e) {
+        playBtn.textContent = '▶';
+      }
+    } else {
+      playBtn.textContent = '▶';
     }
   }
 
-  bgmControl.addEventListener('click', async () => {
-    if (bgmEnabled && !bgm.paused) {
-      bgm.pause();
-      bgmEnabled = false;
-      bgmControl.classList.add('off');
-      bgmLabel.textContent = '♫ BGM OFF';
-    } else {
+  async function startBgm() {
+    musicPlayer.classList.add('show');
+
+    if (!bgm.src) {
+      bgm.src = tracks[currentTrack].src;
+      bgm.load();
+    }
+
+    try {
+      bgm.volume = 0;
+      await bgm.play();
+      playBtn.textContent = '❚❚';
+      fadeVolume(targetVolume, 1800);
+    } catch (e) {
+      playBtn.textContent = '▶';
+    }
+  }
+
+  playBtn.addEventListener('click', async () => {
+    if (bgm.paused) {
       try {
         await bgm.play();
-        bgmEnabled = true;
-        bgmControl.classList.remove('off');
-        bgmLabel.textContent = '♫ BGM ON';
-        fadeBgmTo(0.24, 900);
+        playBtn.textContent = '❚❚';
+        fadeVolume(targetVolume, 450);
       } catch (e) {}
+    } else {
+      bgm.pause();
+      playBtn.textContent = '▶';
     }
   });
+
+  prevBtn.addEventListener('click', () => {
+    loadTrack(currentTrack - 1, true);
+  });
+
+  nextBtn.addEventListener('click', () => {
+    if (shuffleMode && tracks.length > 1) {
+      let next = currentTrack;
+      while (next === currentTrack) {
+        next = Math.floor(Math.random() * tracks.length);
+      }
+      loadTrack(next, true);
+    } else {
+      loadTrack(currentTrack + 1, true);
+    }
+  });
+
+  shuffleBtn.addEventListener('click', () => {
+    shuffleMode = !shuffleMode;
+    shuffleBtn.classList.toggle('active', shuffleMode);
+  });
+
+  repeatBtn.addEventListener('click', () => {
+    repeatOne = !repeatOne;
+    repeatBtn.classList.toggle('active', repeatOne);
+  });
+
+  playlistBtn.addEventListener('click', () => {
+    playlistEl.classList.toggle('open');
+  });
+
+  volumeSlider.addEventListener('input', () => {
+    const percent = Number(volumeSlider.value);
+    targetVolume = percent / 100;
+    volumeValue.textContent = percent + '%';
+    bgm.volume = targetVolume;
+  });
+
+  bgm.addEventListener('ended', () => {
+    if (repeatOne) {
+      bgm.currentTime = 0;
+      bgm.play();
+      return;
+    }
+
+    if (shuffleMode && tracks.length > 1) {
+      let next = currentTrack;
+      while (next === currentTrack) {
+        next = Math.floor(Math.random() * tracks.length);
+      }
+      loadTrack(next, true);
+    } else {
+      loadTrack(currentTrack + 1, true);
+    }
+  });
+
+  bgm.addEventListener('play', () => playBtn.textContent = '❚❚');
+  bgm.addEventListener('pause', () => {
+    if (!bgm.ended) playBtn.textContent = '▶';
+  });
+
+  loadTrack(0, false);
+
   const revealBtn = document.getElementById('revealBtn');
   const secret = document.getElementById('secret');
   const againBtn = document.getElementById('againBtn');
@@ -390,9 +695,10 @@
       bgm.pause();
       bgm.currentTime = 0;
       bgm.volume = 0;
-      bgmEnabled = true;
-      bgmControl.classList.remove('show','off');
-      bgmLabel.textContent = '♫ BGM ON';
+      musicPlayer.classList.remove('show');
+      playlistEl.classList.remove('open');
+      playBtn.textContent = '▶';
+      targetVolume = Number(volumeSlider.value) / 100;
     }, 500);
   });
 
