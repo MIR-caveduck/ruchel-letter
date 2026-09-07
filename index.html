@@ -202,6 +202,42 @@
     .volume-value{min-width:30px; font-size:10px}
   }
 
+
+  .social-links{
+    display:flex; justify-content:center; align-items:center;
+    gap:12px; margin-top:18px;
+  }
+  .social-link{
+    width:46px; height:46px; border-radius:14px;
+    display:grid; place-items:center;
+    text-decoration:none; color:#fff;
+    border:1px solid rgba(94,64,77,.14);
+    box-shadow:0 7px 18px rgba(56,30,42,.12);
+    transition:transform .22s ease, box-shadow .22s ease, opacity .22s ease;
+    overflow:hidden;
+  }
+  .social-link:hover{
+    transform:translateY(-3px) scale(1.06);
+    box-shadow:0 10px 24px rgba(56,30,42,.20);
+  }
+  .social-link.youtube{background:#ff0033}
+  .social-link.x{background:#000}
+  .social-link.soop{
+    background:#1f6feb;
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:-.06em;
+  }
+  .social-link svg{display:block}
+  .social-link.youtube svg{width:28px;height:20px}
+  .social-link.x svg{width:21px;height:21px}
+  .soop-wordmark{transform:translateY(.5px)}
+  .social-label{
+    margin-top:9px; font-size:11px; color:#9c8790;
+    letter-spacing:.03em;
+  }
+
 </style>
 </head>
 <body>
@@ -335,6 +371,26 @@
         <div>편지를 끝까지 읽어줘서 고마워요.</div>
         <strong>From. 하늘길</strong><br>
         <button class="again" id="againBtn">처음부터 다시 보기</button>
+
+        <div class="social-links" aria-label="루첼 소셜 링크">
+          <a class="social-link soop" href="https://www.sooplive.com/station/ausdurfurwpf" target="_blank" rel="noopener noreferrer" aria-label="루첼 SOOP 방송국" title="SOOP">
+            <span class="soop-wordmark">SOOP</span>
+          </a>
+
+          <a class="social-link youtube" href="https://www.youtube.com/@ruchelkk" target="_blank" rel="noopener noreferrer" aria-label="루첼 YouTube" title="YouTube">
+            <svg viewBox="0 0 28 20" aria-hidden="true">
+              <rect x="0" y="0" width="28" height="20" rx="5.5" fill="#ff0033"/>
+              <path d="M11.2 5.8 19 10l-7.8 4.2V5.8Z" fill="#fff"/>
+            </svg>
+          </a>
+
+          <a class="social-link x" href="https://x.com/ruchelkk" target="_blank" rel="noopener noreferrer" aria-label="루첼 X" title="X">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#fff" d="M18.7 3H22l-7.2 8.2L23.3 21h-6.7l-5.2-6.8L5.4 21H2.1l7.8-8.9L1.7 3h6.9l4.7 6.2L18.7 3Zm-1.2 16h1.8L7.6 4.9h-2L17.5 19Z"/>
+            </svg>
+          </a>
+        </div>
+        <div class="social-label">SOOP · YouTube · X</div>
       </div>
     </article>
   </div>
