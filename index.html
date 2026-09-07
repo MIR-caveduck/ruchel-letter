@@ -160,82 +160,26 @@
     .img-card{border-radius:12px}
   }
 
-  .bgm-panel{
+  .bgm-control{
     position:fixed; top:18px; right:18px; z-index:60;
-    display:none; align-items:center; gap:10px;
+    display:none; align-items:center; gap:8px;
     border:1px solid rgba(255,255,255,.16);
-    background:rgba(20,14,18,.76); color:#fff;
+    background:rgba(20,14,18,.72); color:#fff;
     backdrop-filter:blur(10px);
-    padding:9px 12px; border-radius:999px;
-    box-shadow:0 8px 24px rgba(0,0,0,.22);
+    padding:9px 13px; border-radius:999px;
+    font-size:12px; font-weight:700; letter-spacing:.02em;
+    cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,.22);
     transition:.25s ease;
   }
-  .bgm-panel.show{display:flex}
-  .bgm-toggle{
-    border:0; background:transparent; color:#fff; padding:0;
-    display:flex; align-items:center; gap:8px;
-    font-size:12px; font-weight:700; letter-spacing:.02em;
-    cursor:pointer;
-  }
-  .bgm-panel:hover{transform:translateY(-1px); background:rgba(35,19,27,.86)}
+  .bgm-control.show{display:flex}
+  .bgm-control:hover{transform:translateY(-1px); background:rgba(35,19,27,.84)}
   .bgm-dot{
     width:8px; height:8px; border-radius:50%;
     background:#e15c86; box-shadow:0 0 10px rgba(225,92,134,.7);
   }
-  .bgm-panel.off .bgm-dot{opacity:.35; box-shadow:none}
-  .volume-wrap{display:flex; align-items:center; gap:7px}
-  .volume-icon{font-size:13px; opacity:.9}
-  .volume-slider{
-    width:105px; accent-color:#e15c86; cursor:pointer;
-  }
-  .volume-value{
-    min-width:34px; text-align:right; font-size:11px;
-    color:#e8dce2; font-variant-numeric:tabular-nums;
-  }
+  .bgm-control.off .bgm-dot{opacity:.35; box-shadow:none}
   @media (max-width:700px){
-    .bgm-panel{
-      top:10px; right:10px; padding:8px 10px; gap:8px;
-      border-radius:18px;
-    }
-    .bgm-toggle{font-size:11px}
-    .volume-slider{width:76px}
-    .volume-value{min-width:30px; font-size:10px}
-  }
-
-
-  .social-links{
-    display:flex; justify-content:center; align-items:center;
-    gap:12px; margin-top:18px;
-  }
-  .social-link{
-    width:46px; height:46px; border-radius:14px;
-    display:grid; place-items:center;
-    text-decoration:none; color:#fff;
-    border:1px solid rgba(94,64,77,.14);
-    box-shadow:0 7px 18px rgba(56,30,42,.12);
-    transition:transform .22s ease, box-shadow .22s ease, opacity .22s ease;
-    overflow:hidden;
-  }
-  .social-link:hover{
-    transform:translateY(-3px) scale(1.06);
-    box-shadow:0 10px 24px rgba(56,30,42,.20);
-  }
-  .social-link.youtube{background:#ff0033}
-  .social-link.x{background:#000}
-  .social-link.soop{
-    background:#1f6feb;
-    font-family:Arial,Helvetica,sans-serif;
-    font-size:11px;
-    font-weight:900;
-    letter-spacing:-.06em;
-  }
-  .social-link svg{display:block}
-  .social-link.youtube svg{width:28px;height:20px}
-  .social-link.x svg{width:21px;height:21px}
-  .soop-wordmark{transform:translateY(.5px)}
-  .social-label{
-    margin-top:9px; font-size:11px; color:#9c8790;
-    letter-spacing:.03em;
+    .bgm-control{top:10px; right:10px; padding:8px 11px; font-size:11px}
   }
 
 </style>
@@ -243,26 +187,10 @@
 <body>
 
 <audio id="bgm" src="music/ruchel-letter.mp3" preload="auto" loop></audio>
-<div class="bgm-panel" id="bgmPanel">
-  <button class="bgm-toggle" id="bgmControl" type="button" aria-label="BGM 켜기 또는 끄기">
-    <span class="bgm-dot"></span>
-    <span id="bgmLabel">♫ BGM ON</span>
-  </button>
-  <div class="volume-wrap">
-    <span class="volume-icon">🔊</span>
-    <input
-      class="volume-slider"
-      id="volumeSlider"
-      type="range"
-      min="0"
-      max="100"
-      value="24"
-      step="1"
-      aria-label="BGM 볼륨"
-    >
-    <span class="volume-value" id="volumeValue">24%</span>
-  </div>
-</div>
+<button class="bgm-control" id="bgmControl" type="button" aria-label="BGM 켜기 또는 끄기">
+  <span class="bgm-dot"></span>
+  <span id="bgmLabel">♫ BGM ON</span>
+</button>
 
 
 <section class="gate" id="gate">
@@ -292,7 +220,7 @@
 
         <div class="letter">
           <p class="fade">
-            어떤 머리만 크고 하는건 없는 유령을 통해 루첼님을 알게 된 건 벌써 1년 정도 되었는데,<br>
+            어떤 머리말 크고 하는건 없는 유령을 통해 루첼님을 알게 된 건 벌써 1년 정도 되었는데,<br>
             생각해 보면 그동안 방송을 정말 자주 챙겨본 건 아니었던 것 같아요.<br>
             가끔 생각날 때 찾아가 보고,<br>
             간간이 방송을 구경하던 정도라<br>
@@ -342,7 +270,7 @@
 
           <figure class="fade">
             <img class="img-card" src="images/hammer.png" alt="루첼 뿅망치 이미지">
-            <figcaption><i>P.S. 그리고 라브넴. 2기생 준비하시는 거 다 좋은데요.</i><br><b><i>우리 루첼님은요? 네? ^^</i></b></figcaption>
+            <figcaption>P.S. 그리고 루첼님, 2기생 준비하시는 거 다 들었어요.<br><b>우리 루첼님도요?!!? ^^</b></figcaption>
           </figure>
 
           <div class="divider fade">방송보다가 추가한 이미지</div>
@@ -371,26 +299,6 @@
         <div>편지를 끝까지 읽어줘서 고마워요.</div>
         <strong>From. 하늘길</strong><br>
         <button class="again" id="againBtn">처음부터 다시 보기</button>
-
-        <div class="social-links" aria-label="루첼 소셜 링크">
-          <a class="social-link soop" href="https://www.sooplive.com/station/ausdurfurwpf" target="_blank" rel="noopener noreferrer" aria-label="루첼 SOOP 방송국" title="SOOP">
-            <span class="soop-wordmark">SOOP</span>
-          </a>
-
-          <a class="social-link youtube" href="https://www.youtube.com/@ruchelkk" target="_blank" rel="noopener noreferrer" aria-label="루첼 YouTube" title="YouTube">
-            <svg viewBox="0 0 28 20" aria-hidden="true">
-              <rect x="0" y="0" width="28" height="20" rx="5.5" fill="#ff0033"/>
-              <path d="M11.2 5.8 19 10l-7.8 4.2V5.8Z" fill="#fff"/>
-            </svg>
-          </a>
-
-          <a class="social-link x" href="https://x.com/ruchelkk" target="_blank" rel="noopener noreferrer" aria-label="루첼 X" title="X">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path fill="#fff" d="M18.7 3H22l-7.2 8.2L23.3 21h-6.7l-5.2-6.8L5.4 21H2.1l7.8-8.9L1.7 3h6.9l4.7 6.2L18.7 3Zm-1.2 16h1.8L7.6 4.9h-2L17.5 19Z"/>
-            </svg>
-          </a>
-        </div>
-        <div class="social-label">SOOP · YouTube · X</div>
       </div>
     </article>
   </div>
@@ -400,13 +308,9 @@
   const gate = document.getElementById('gate');
   const openBtn = document.getElementById('openLetter');
   const bgm = document.getElementById('bgm');
-  const bgmPanel = document.getElementById('bgmPanel');
   const bgmControl = document.getElementById('bgmControl');
   const bgmLabel = document.getElementById('bgmLabel');
-  const volumeSlider = document.getElementById('volumeSlider');
-  const volumeValue = document.getElementById('volumeValue');
   let bgmEnabled = true;
-  let targetVolume = 0.24;
 
   bgm.volume = 0;
 
@@ -427,12 +331,12 @@
       bgm.volume = 0;
       await bgm.play();
       bgmEnabled = true;
-      bgmPanel.classList.add('show');
-      bgmPanel.classList.remove('off');
+      bgmControl.classList.add('show');
+      bgmControl.classList.remove('off');
       bgmLabel.textContent = '♫ BGM ON';
-      fadeBgmTo(targetVolume, 2000);
+      fadeBgmTo(0.24, 2000);
     } catch (e) {
-      bgmPanel.classList.add('show', 'off');
+      bgmControl.classList.add('show', 'off');
       bgmLabel.textContent = '♫ BGM OFF';
       bgmEnabled = false;
     }
@@ -442,25 +346,16 @@
     if (bgmEnabled && !bgm.paused) {
       bgm.pause();
       bgmEnabled = false;
-      bgmPanel.classList.add('off');
+      bgmControl.classList.add('off');
       bgmLabel.textContent = '♫ BGM OFF';
     } else {
       try {
         await bgm.play();
         bgmEnabled = true;
-        bgmPanel.classList.remove('off');
+        bgmControl.classList.remove('off');
         bgmLabel.textContent = '♫ BGM ON';
-        fadeBgmTo(targetVolume, 900);
+        fadeBgmTo(0.24, 900);
       } catch (e) {}
-    }
-  });
-
-  volumeSlider.addEventListener('input', () => {
-    const percent = Number(volumeSlider.value);
-    targetVolume = percent / 100;
-    volumeValue.textContent = percent + '%';
-    if (!bgm.paused && bgmEnabled) {
-      bgm.volume = targetVolume;
     }
   });
   const revealBtn = document.getElementById('revealBtn');
@@ -496,9 +391,8 @@
       bgm.currentTime = 0;
       bgm.volume = 0;
       bgmEnabled = true;
-      bgmPanel.classList.remove('show','off');
+      bgmControl.classList.remove('show','off');
       bgmLabel.textContent = '♫ BGM ON';
-      targetVolume = Number(volumeSlider.value) / 100;
     }, 500);
   });
 
